@@ -1,32 +1,29 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_flutter/auth/auth_repository.dart';
 import 'package:test_flutter/auth/form_submissin_status.dart';
-import 'package:test_flutter/auth/%20login/login_event.dart';
-import 'package:test_flutter/auth/%20login/login_state.dart';
+import 'package:test_flutter/auth/login/login_event.dart';
+import 'package:test_flutter/auth/login/login_state.dart';
 
-class LoginBloc extends Bloc<LoginEvent,LoginState> {
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository authRepository;
   LoginBloc({required this.authRepository}) : super(LoginState());
-
-
-
+  String username = '', password = '';
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is LoginUsernameChanged) {
-      yield state.copyWith(username: event.username);
-
-
+      username = event.username;
+      yield state.copyWith(
+          username: event.username, formStatus: InitialFormStatus());
     } else if (event is LoginPasswordChanged) {
-      yield state.copyWith(password: event.password);
-
-
+      password = event.password;
+      yield state.copyWith(
+          password: event.password, formStatus: InitialFormStatus());
     } else if (event is LoginSubmitted) {
       yield state.copyWith(formStatus: FormSubmitting());
-
       try {
-        await authRepository.login();
+        await authRepository.login(username, password);
         yield state.copyWith(formStatus: SubmissionSuccess());
-      }on Exception catch (exception) {
+      } on Exception catch (exception) {
         yield state.copyWith(formStatus: SubmissionFailed(exception));
       }
     }

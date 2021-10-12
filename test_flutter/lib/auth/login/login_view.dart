@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_flutter/auth/auth_repository.dart';
 import 'package:test_flutter/auth/form_submissin_status.dart';
-import 'package:test_flutter/auth/%20login/login_bloc.dart';
-import 'package:test_flutter/auth/%20login/login_event.dart';
-import 'package:test_flutter/auth/%20login/login_state.dart';
+import 'package:test_flutter/auth/login/login_bloc.dart';
+import 'package:test_flutter/auth/login/login_event.dart';
+import 'package:test_flutter/auth/login/login_state.dart';
 
 import '../form_submissin_status.dart';
 
@@ -27,10 +27,11 @@ class LoginView extends StatelessWidget {
   Widget _loginForm() {
     return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
-
           final formStatus = state.formStatus;
           if (formStatus is SubmissionFailed) {
             _showSnackBar(context, formStatus.exception.toString());
+          } else if (formStatus is SubmissionSuccess) {
+            Navigator.popAndPushNamed(context, '/welcomePage');
           }
         },
         child: Form(
@@ -40,11 +41,15 @@ class LoginView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 _usernameField(),
                 _passwordField(),
-                _loginButton(),
-
+                const Padding(padding: EdgeInsets.only(top: 15)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _loginButton(),
+                  ],
+                )
               ],
             ),
           ),
@@ -60,10 +65,10 @@ class LoginView extends StatelessWidget {
           hintText: 'Username',
         ),
         validator: (value) =>
-        state.isValidUsername ? null : 'Username is too short',
+            state.isValidUsername ? null : 'Username is too short',
         onChanged: (value) => context.read<LoginBloc>().add(
-          LoginUsernameChanged(username: value),
-        ),
+              LoginUsernameChanged(username: value),
+            ),
       );
     });
   }
@@ -77,10 +82,10 @@ class LoginView extends StatelessWidget {
           hintText: 'Password',
         ),
         validator: (value) =>
-        state.isValidPassword ? null : 'Password is too short',
+            state.isValidPassword ? null : 'Password is too short',
         onChanged: (value) => context.read<LoginBloc>().add(
-          LoginPasswordChanged(password: value),
-        ),
+              LoginPasswordChanged(password: value),
+            ),
       );
     });
   }
@@ -90,13 +95,13 @@ class LoginView extends StatelessWidget {
       return state.formStatus is FormSubmitting
           ? const CircularProgressIndicator()
           : ElevatedButton(
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            context.read<LoginBloc>().add(LoginSubmitted());
-          }
-        },
-        child: const Text('Login'),
-      );
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  context.read<LoginBloc>().add(LoginSubmitted());
+                }
+              },
+              child: const Text('Login'),
+            );
     });
   }
 

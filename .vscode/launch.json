@@ -1,0 +1,24 @@
+{
+    // Используйте IntelliSense, чтобы узнать о возможных атрибутах.
+    // Наведите указатель мыши, чтобы просмотреть описания существующих атрибутов.
+    // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "test_flutter",
+            "cwd": "test_flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "test_flutter (profile mode)",
+            "cwd": "test_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "args": [
+                "--no-sound-null-safety"
+            ]
+        }
+    ]
+}

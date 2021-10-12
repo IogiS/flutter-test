@@ -7,7 +7,7 @@ class LoginState {
   final String password;
   bool get isValidPassword => password.length > 6;
 
-  final FormSubmissionStatus formStatus;
+  final FormSubmissionStatus? formStatus;
 
   LoginState({
     this.username = '',
@@ -16,9 +16,9 @@ class LoginState {
   });
 
   LoginState copyWith({
-     String? username,
-     String? password,
-    FormSubmissionStatus formStatus = const InitialFormStatus(),
+    String? username,
+    String? password,
+    required FormSubmissionStatus formStatus,
   }) {
     return LoginState(
       username: username.toString(),

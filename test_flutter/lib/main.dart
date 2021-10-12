@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_flutter/auth/%20login/login_view.dart';
+import 'package:test_flutter/auth/login/login_view.dart';
 import 'package:test_flutter/auth/auth_repository.dart';
+import 'package:test_flutter/pages/welcome_pages.dart';
 
 
 void main() {
@@ -15,10 +16,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:RepositoryProvider(
-        create: (context) =>  AuthRepository(),
-        child: LoginView(),
-      )
+      initialRoute: '/',
+      routes:{
+        '/' : (context) => RepositoryProvider(
+                            create: (context) =>  AuthRepository(),
+                            child: LoginView(),),
+        '/welcomePage': (context) =>   WelcomePage(),              
+      },
+      
     );
   }
 }
