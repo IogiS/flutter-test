@@ -10,7 +10,7 @@ class AuthRepository {
   static final SESSION = FlutterSession();
   Future<void> login(String username, String password) async {
     const baseUrl = 'https://my-json-server.typicode.com/IogiS/FakeRestAPI';
-    const key = 's3cr3t';
+
     bool candidate = false;
     try {
       var res = await http.get('$baseUrl/users');
@@ -46,7 +46,6 @@ class AuthRepository {
 
     String token = issueJwtHS256(claimSet, key);
     final JwtClaim decClaimSet = verifyJwtHS256Signature(token, key);
-    print(decClaimSet.payload.entries.last.value);
     return token;
   }
 
