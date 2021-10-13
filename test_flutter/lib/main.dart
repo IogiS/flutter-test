@@ -4,7 +4,6 @@ import 'package:test_flutter/auth/login/login_view.dart';
 import 'package:test_flutter/auth/auth_repository.dart';
 import 'package:test_flutter/pages/welcome_pages.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -17,15 +16,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/',
-      routes:{
-        '/' : (context) => RepositoryProvider(
-                            create: (context) =>  AuthRepository(),
-                            child: LoginView(),),
-        '/welcomePage': (context) =>   WelcomePage(),              
+      routes: {
+        '/': (context) => RepositoryProvider(
+              create: (context) => AuthRepository(),
+              child: LoginView(),
+            ),
+        '/welcomePage': (context) => WelcomePage(),
       },
-      
     );
   }
 }
-
-

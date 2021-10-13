@@ -5,6 +5,7 @@ import 'package:test_flutter/auth/form_submissin_status.dart';
 import 'package:test_flutter/auth/login/login_bloc.dart';
 import 'package:test_flutter/auth/login/login_event.dart';
 import 'package:test_flutter/auth/login/login_state.dart';
+import 'package:test_flutter/pages/welcome_pages.dart';
 
 import '../form_submissin_status.dart';
 
@@ -19,7 +20,18 @@ class LoginView extends StatelessWidget {
         create: (context) => LoginBloc(
           authRepository: context.read<AuthRepository>(),
         ),
-        child: _loginForm(),
+        child: FutureBuilder(
+          future: AuthRepository.getTokens(),
+          builder: (_, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasData) {
+              return WelcomePage();
+            } else {
+              return _loginForm();
+            }
+          },
+        ),
       ),
     );
   }

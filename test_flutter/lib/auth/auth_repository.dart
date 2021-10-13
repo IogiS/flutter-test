@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_session/flutter_session.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
@@ -7,11 +7,11 @@ import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepository {
+  static final SESSION = FlutterSession();
   Future<void> login(String username, String password) async {
     const baseUrl = 'https://my-json-server.typicode.com/IogiS/FakeRestAPI';
     const key = 's3cr3t';
     bool candidate = false;
-    //await Future.delayed(Duration(seconds: 3));
     try {
       var res = await http.get('$baseUrl/users');
 
@@ -23,7 +23,7 @@ class AuthRepository {
       });
       if (candidate) {
         var token = getToken(username, password);
-        print(token);
+        setToken(token, "my_refresh_token");
       } else {
         throw Exception();
       }
@@ -48,8 +48,9 @@ class AuthRepository {
     final JwtClaim decClaimSet = verifyJwtHS256Signature(token, key);
     print(decClaimSet.payload.entries.last.value);
     return token;
+  }
 
-    /* try {
+  /* try {
       final JwtClaim decClaimSet = verifyJwtHS256Signature(token, key);
       // print(decClaimSet);
       print(decClaimSet);
@@ -65,5 +66,29 @@ class AuthRepository {
         } else {}
       }
     } on JwtException {} */
+  static setToken(String token, String refreshToken) async {
+    _AuthData data = _AuthData(token, refreshToken);
+    await SESSION.set('tokens', data);
+  }
+
+  static Future getTokens() async => await SESSION.get('tokens');
+
+  static removeToken() async {
+    await SESSION.prefs.clear();
+  }
+}
+
+class _AuthData {
+  String token, refreshToken;
+  _AuthData(this.token, this.refreshToken);
+
+  // toJson
+  // required by Session lib
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+
+    data['token'] = token;
+    data['refreshToken'] = refreshToken;
+    return data;
   }
 }

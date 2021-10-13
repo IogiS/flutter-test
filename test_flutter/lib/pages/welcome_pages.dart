@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:test_flutter/auth/auth_repository.dart';
 
 class WelcomePage extends StatelessWidget {
-  const WelcomePage({ Key? key }) : super(key: key);
+  const WelcomePage({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,6 +15,7 @@ class WelcomePage extends StatelessWidget {
               RaisedButton(
                 child: Text('Log out'),
                 onPressed: () {
+                  AuthRepository.removeToken();
                   Navigator.popAndPushNamed(context, '/');
                 },
               ),
