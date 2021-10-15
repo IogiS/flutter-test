@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 class AuthRepository {
   static final SESSION = FlutterSession();
+  static bool firstLogin = false;
   Future<void> login(String username, String password) async {
     const baseUrl = 'https://my-json-server.typicode.com/IogiS/FakeRestAPI';
 

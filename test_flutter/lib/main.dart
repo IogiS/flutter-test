@@ -1,12 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_flutter/auth/login/login_view.dart';
 import 'package:test_flutter/auth/auth_repository.dart';
 import 'package:test_flutter/pages/main_content.dart';
+import 'package:test_flutter/pages/main_content.dart';
 import 'package:test_flutter/pages/welcome_pages.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +35,7 @@ class MyApp extends StatelessWidget {
               child: LoginView(),
             ),
         '/welcomePage': (context) => WelcomePage(),
-        '/mainContent': (context) => MainContent(),
+        '/mainContent': (context) => mainContent(),
       },
     );
   }

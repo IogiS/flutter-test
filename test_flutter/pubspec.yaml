@@ -39,6 +39,11 @@ dependencies:
   jaguar_jwt: ^3.0.0
   http: ^0.12.2
   flutter_session: ^0.1.1
+  infinite_scroll_pagination: ^3.1.0
+  built_value:
+  built_collection:
+  kiwi:
+  pull_to_refresh: ^2.0.0
 
 
 
@@ -47,7 +52,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+build_runner:
+build_value_generator:
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

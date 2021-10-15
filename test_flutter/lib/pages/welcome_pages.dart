@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 
+import 'package:test_flutter/auth/auth_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
+
+  static void isFirstEntrance(bool isFirst) async {
+    AuthRepository.firstLogin = isFirst;
+    SharedPreferences prefs =
+        await SharedPreferences.getInstance(); // Хранилище
+    if (isFirst) {
+      prefs.getBool('banner') ?? true;
+    } else {
+      prefs.setBool('banner', false);
+    }
+  }
 }
 
 int _widgetId = 1;
@@ -69,6 +83,7 @@ class _WelcomePageState extends State<WelcomePage> {
               RaisedButton(
                 child: const Text('To Main'),
                 onPressed: () {
+                  WelcomePage.isFirstEntrance(false);
                   Navigator.popAndPushNamed(context, '/mainContent');
                 },
               ),

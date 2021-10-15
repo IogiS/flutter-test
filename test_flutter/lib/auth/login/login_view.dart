@@ -5,8 +5,9 @@ import 'package:test_flutter/auth/form_submissin_status.dart';
 import 'package:test_flutter/auth/login/login_bloc.dart';
 import 'package:test_flutter/auth/login/login_event.dart';
 import 'package:test_flutter/auth/login/login_state.dart';
+import 'package:test_flutter/pages/main_content.dart';
 import 'package:test_flutter/pages/welcome_pages.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../form_submissin_status.dart';
 
 class LoginView extends StatelessWidget {
@@ -26,7 +27,12 @@ class LoginView extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
             } else if (snapshot.hasData) {
-              return WelcomePage();
+              if (AuthRepository.firstLogin) {
+                WelcomePage.isFirstEntrance(false);
+                return WelcomePage();
+              } else {
+                return mainContent();
+              }
             } else {
               return _loginForm();
             }
@@ -43,7 +49,12 @@ class LoginView extends StatelessWidget {
           if (formStatus is SubmissionFailed) {
             _showSnackBar(context, formStatus.exception.toString());
           } else if (formStatus is SubmissionSuccess) {
-            Navigator.popAndPushNamed(context, '/welcomePage');
+            if (AuthRepository.firstLogin) {
+              WelcomePage.isFirstEntrance(false);
+              Navigator.popAndPushNamed(context, '/welcomePage');
+            } else {
+              Navigator.popAndPushNamed(context, '/mainContent');
+            }
           }
         },
         child: Form(
