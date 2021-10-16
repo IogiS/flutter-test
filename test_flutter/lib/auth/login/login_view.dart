@@ -5,7 +5,7 @@ import 'package:test_flutter/auth/form_submissin_status.dart';
 import 'package:test_flutter/auth/login/login_bloc.dart';
 import 'package:test_flutter/auth/login/login_event.dart';
 import 'package:test_flutter/auth/login/login_state.dart';
-import 'package:test_flutter/pages/main_content.dart';
+import 'package:test_flutter/pages/goods_list.dart';
 import 'package:test_flutter/pages/welcome_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../form_submissin_status.dart';
@@ -27,11 +27,13 @@ class LoginView extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
             } else if (snapshot.hasData) {
+              print(snapshot);
               if (AuthRepository.firstLogin) {
+                print(AuthRepository.firstLogin);
                 WelcomePage.isFirstEntrance(false);
                 return WelcomePage();
               } else {
-                return mainContent();
+                return goodsList();
               }
             } else {
               return _loginForm();
@@ -51,9 +53,9 @@ class LoginView extends StatelessWidget {
           } else if (formStatus is SubmissionSuccess) {
             if (AuthRepository.firstLogin) {
               WelcomePage.isFirstEntrance(false);
-              Navigator.popAndPushNamed(context, '/welcomePage');
+              Navigator.popAndPushNamed(context, '/');
             } else {
-              Navigator.popAndPushNamed(context, '/mainContent');
+              Navigator.popAndPushNamed(context, '/goodsList');
             }
           }
         },

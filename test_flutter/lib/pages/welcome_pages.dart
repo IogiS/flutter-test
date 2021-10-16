@@ -84,7 +84,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 child: const Text('To Main'),
                 onPressed: () {
                   WelcomePage.isFirstEntrance(false);
-                  Navigator.popAndPushNamed(context, '/mainContent');
+                  Navigator.popAndPushNamed(context, '/goodsList');
                 },
               ),
             ],

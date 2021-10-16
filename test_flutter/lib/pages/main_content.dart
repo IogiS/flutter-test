@@ -1,137 +1,94 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:test_flutter/model/videocards_data.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:test_flutter/pages/goods_list.dart';
+import 'package:test_flutter/pages/welcome_pages.dart';
 
-class mainContent extends StatefulWidget {
-  @override
-  _mainContentState createState() => _mainContentState();
-}
+/// This is the main application widget.
+class MainContent extends StatelessWidget {
+  const MainContent({Key? key}) : super(key: key);
 
-class _mainContentState extends State<mainContent> {
-  int currentPage = 1;
-
-  late int totalPages;
-
-  List<VideocardsData> videoCard = [];
-
-  final RefreshController refreshController =
-      RefreshController(initialRefresh: true);
-
-  Future<bool> getVideocardsData({bool isRefresh = false}) async {
-    if (isRefresh) {
-      currentPage = 1;
-    } else {
-      if (currentPage > totalPages) {
-        refreshController.loadNoData();
-        return false;
-      }
-    }
-
-    final Uri uri = Uri.parse(
-        "https://my-json-server.typicode.com/IogiS/FakeRestAPI/videocards");
-
-    final response = await http.get(uri);
-
-    if (response.statusCode == 200) {
-      final result = videocardsDataFromJson(response.body);
-
-      final currentPageContent = currentPage * 10;
-      List<VideocardsData> res = [];
-      result.forEach((element) {
-        if (element.id <= currentPageContent) {
-          if (element.id >= currentPageContent - 9) {
-            res.add(element);
-          }
-        }
-      });
-
-      if (isRefresh) {
-        videoCard = res;
-      } else {
-        videoCard.addAll(res);
-      }
-      currentPage++;
-
-      totalPages = result.length ~/ 10;
-
-      setState(() {});
-      return true;
-    } else {
-      return false;
-    }
-  }
+  static const String _title = 'Flutter Code Sample';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Infinite List Pagination"),
-      ),
-      body: SmartRefresher(
-        controller: refreshController,
-        enablePullUp: true,
-        onRefresh: () async {
-          final result = await getVideocardsData(isRefresh: true);
-          if (result) {
-            refreshController.refreshCompleted();
-          } else {
-            refreshController.refreshFailed();
-          }
-        },
-        onLoading: () async {
-          final result = await getVideocardsData();
-          if (result) {
-            refreshController.loadComplete();
-          } else {
-            refreshController.loadFailed();
-          }
-        },
-        child: ListView.separated(
-          itemBuilder: (context, index) {
-            final passenger = videoCard[index];
-
-            return ListTile(
-              title: Text(passenger.name),
-              subtitle: Text(passenger.manufacturer.toString()),
-              trailing: Image(
-                image: NetworkImage(passenger.img),
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ArticlePage(passenger)));
-              },
-            );
-          },
-          separatorBuilder: (context, index) => Divider(),
-          itemCount: videoCard.length,
-        ),
-      ),
+    return const MaterialApp(
+      title: _title,
+      home: MyStatefulWidget(),
     );
   }
 }
 
-class ArticlePage extends StatelessWidget {
-  final VideocardsData article;
-  ArticlePage(this.article);
+/// This is the stateful widget that the main application instantiates.
+class MyStatefulWidget extends StatefulWidget {
+  const MyStatefulWidget({Key? key}) : super(key: key);
+
+  @override
+  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+/// This is the private State class that goes with MyStatefulWidget.
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  int _selectedIndex = 0;
+
+  Widget goodsLists = goodsList();
+  Widget welcomePage = WelcomePage();
+
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  Widget getBody() {
+    if (this._selectedIndex == 0) {
+      return this.goodsLists;
+    } else if (this._selectedIndex == 1) {
+      return this.goodsLists;
+    } else {
+      return this.welcomePage;
+    }
+  }
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(article.name),
+        title: const Text('BottomNavigationBar Sample'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Text(article.manufacturer.toString()),
-            Image(
-              image: NetworkImage(article.img),
-            )
-          ],
-        ),
+      body: Center(
+        child: getBody(),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.badge),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'Goods',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
     );
   }
