@@ -29,7 +29,7 @@ class MyStatefulWidget extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
-
+  Widget animatedWidget = WelcomePage();
   Widget goodsLists = goodsList();
   Widget welcomePage = WelcomePage();
   Widget profile = Profile();
@@ -47,20 +47,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     }
   }
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      animatedWidget = getBody();
     });
   }
 
@@ -71,7 +61,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         title: const Text('BottomNavigationBar Sample'),
       ),
       body: Center(
-        child: getBody(),
+        child: AnimatedSwitcher(
+          duration: const Duration(seconds: 1),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return ScaleTransition(child: child, scale: animation);
+          },
+          child: this.animatedWidget,
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

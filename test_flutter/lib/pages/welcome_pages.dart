@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: import_of_legacy_library_into_null_safe
 
+import 'package:flutter/material.dart';
 import 'package:test_flutter/auth/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -101,6 +102,9 @@ class _WelcomePageState extends State<WelcomePage> {
             children: [
               AnimatedSwitcher(
                 duration: const Duration(seconds: 1),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return ScaleTransition(child: child, scale: animation);
+                },
                 child: _renderWidget(),
               ),
               RaisedButton(

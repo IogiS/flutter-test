@@ -47,27 +47,10 @@ class AuthRepository {
         maxAge: const Duration(minutes: 5));
 
     String token = issueJwtHS256(claimSet, key);
-    final JwtClaim decClaimSet = verifyJwtHS256Signature(token, key);
-    print(token);
+
     return token;
   }
 
-  /* try {
-      final JwtClaim decClaimSet = verifyJwtHS256Signature(token, key);
-      // print(decClaimSet);
-      print(decClaimSet);
-      decClaimSet.validate(issuer: 'teja', audience: 'audience1.example.com');
-
-      if (claimSet.jwtId != null) {
-        print(claimSet.jwtId);
-      }
-      if (claimSet.containsKey('typ')) {
-        final v = claimSet['typ'];
-        if (v is String) {
-          print(v);
-        } else {}
-      }
-    } on JwtException {} */
   static setToken(String token, String refreshToken) async {
     _AuthData data = _AuthData(token, refreshToken);
     await SESSION.set('tokens', data);
