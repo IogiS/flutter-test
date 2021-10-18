@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:test_flutter/auth/auth_repository.dart';
 import 'package:test_flutter/model/videocards_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -24,7 +23,7 @@ class _goodsListState extends State<goodsList> {
       currentPage = 1;
     } else {
       if (currentPage > totalPages) {
-        refreshController.loadNoData();
+        refreshController.resetNoData();
         return false;
       }
     }
@@ -127,12 +126,6 @@ class ArticlePage extends StatelessWidget {
             Text(article.manufacturer.toString()),
             Image(
               image: NetworkImage(article.img),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.popAndPushNamed(context, '/mainContent');
-              },
-              child: const Text('Exit'),
             )
           ],
         ),

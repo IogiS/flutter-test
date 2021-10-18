@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 class AuthRepository {
   static final SESSION = FlutterSession();
   static bool firstLogin = false;
+  static var token = "";
   Future<void> login(String username, String password) async {
     const baseUrl = 'https://my-json-server.typicode.com/IogiS/FakeRestAPI';
 
@@ -23,7 +24,7 @@ class AuthRepository {
         }
       });
       if (candidate) {
-        var token = getToken(username, password);
+        token = getToken(username, password);
         setToken(token, "my_refresh_token");
       } else {
         throw Exception();
@@ -47,6 +48,7 @@ class AuthRepository {
 
     String token = issueJwtHS256(claimSet, key);
     final JwtClaim decClaimSet = verifyJwtHS256Signature(token, key);
+    print(token);
     return token;
   }
 

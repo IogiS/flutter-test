@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_flutter/pages/goods_list.dart';
+import 'package:test_flutter/pages/profile.dart';
 import 'package:test_flutter/pages/welcome_pages.dart';
 
 /// This is the main application widget.
@@ -31,17 +32,18 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   Widget goodsLists = goodsList();
   Widget welcomePage = WelcomePage();
+  Widget profile = Profile();
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   Widget getBody() {
     if (this._selectedIndex == 0) {
-      return this.goodsLists;
-    } else if (this._selectedIndex == 1) {
-      return this.goodsLists;
-    } else {
       return this.welcomePage;
+    } else if (this._selectedIndex == 1) {
+      return this.profile;
+    } else {
+      return this.goodsLists;
     }
   }
 
